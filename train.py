@@ -44,8 +44,11 @@ def main(args):
         max_epochs=args.num_epochs,
     )
     
-    # Train :)
+    # Train on SNLI
     trainer.fit(model, dm)
+    
+    # Test on SNLI
+    trainer.test(model, dm)
 
 
 if __name__ == '__main__':
