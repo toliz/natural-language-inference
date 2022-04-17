@@ -32,7 +32,7 @@ class SNLIDataModule(pl.LightningDataModule):
             self.validation_dataset = self._load_dataset('validation')
         
         if stage == 'test' or stage is None:
-            self.train_dataset = self._load_dataset('test')
+            self.test_dataset = self._load_dataset('test')
         
     def train_dataloader(self):
         return DataLoader(
