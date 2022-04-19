@@ -12,7 +12,7 @@ def main(args):
     dm = SNLIDataModule(batch_size=args.batch_size, data_dir=args.data_dir); dm.setup()
     
     # Set up the NLI model
-    model = NLI(dm.vocab, args.data_dir, args.encoder, args.lstm_hidden_dim)
+    model = NLI(dm.vocab, args.encoder, args.lstm_hidden_dim, args.data_dir)
     
     # Set up the model checkpointing and logging
     tb_logger = TensorBoardLogger(
@@ -32,7 +32,7 @@ def main(args):
     
     early_stopping_callback = EarlyStopping(
         monitor='accuracy/validation',
-        min_delta=0.1,
+        min_delta=0.01,
         mode='max',
     )
     

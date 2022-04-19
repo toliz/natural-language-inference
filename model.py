@@ -181,7 +181,7 @@ class BiLSTM(nn.Module):
             output = torch.cat([h[-2, :, :], h[-1, :, :]], dim=1)
         else:
             output, _ = pad_packed_sequence(output, batch_first=True)
-            print(output.shape)
+
             # mask-out hidden states after the end of each sentence.
             mask = torch.zeros_like(output)
             for i in range(B):
@@ -209,7 +209,7 @@ class NLI(pl.LightningModule):
         encoder (str): the encoder model. One of 'AWE', 'LSTM', 'BiLSTM', 'BiLSTM-MaxPool'.
         hidden_dim (int): the dimension of the hidden state of the LSTM, if applicable.
     """
-    def __init__(self, vocab: torchtext.vocab.Vocab, data_dir='./data', encoder='BiLSTM-MaxPool', hidden_dim=2048):
+    def __init__(self, vocab: torchtext.vocab.Vocab, encoder, hidden_dim=None, data_dir='./data'):
         super().__init__()
         
         match encoder:
