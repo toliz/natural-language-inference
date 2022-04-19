@@ -22,7 +22,7 @@ def load_glove_embeddings(vocab: torchtext.vocab.Vocab, data_dir='./data') -> to
         torch.Tensor: the embedding matrix
     """
     if Path(f'{data_dir}/embeddings.pt').exists():
-       return torch.load(f'{data_dir}/embeddings.pt')
+        return torch.load(f'{data_dir}/embeddings.pt')
     else:
         print('Downloading GloVe embeddings...')
         
