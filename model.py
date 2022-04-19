@@ -212,6 +212,8 @@ class NLI(pl.LightningModule):
     def __init__(self, vocab: torchtext.vocab.Vocab, encoder, hidden_dim=None, data_dir='./data'):
         super().__init__()
         
+        self.vocab = vocab
+        
         match encoder:
             case 'AWE':
                 encoder = AWE(vocab, data_dir)
@@ -238,6 +240,15 @@ class NLI(pl.LightningModule):
         # lightning metics
         self._val_acc = torchmetrics.Accuracy()
         self._test_acc = torchmetrics.Accuracy()
+        
+    def encode(self, input: str):
+        tokens = word_tokenize(input.lower())       # tokenize
+        tokens = self.vocab(tokens)                 # convert to indices
+        tokens = torch.tensor(tokens).view(1, -1)   # convert to tensor of batch size 1
+        
+        encoding = self.encoder(tokens)
+        
+        return encoding.flatten()
         
     def forward(self, u, v):
         # Encode the sentences u and v.
