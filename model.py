@@ -4,6 +4,7 @@ import torch
 import torchmetrics
 import torchtext
 
+from nltk import word_tokenize
 from pathlib import Path
 from torch import nn, optim
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
@@ -21,7 +22,7 @@ def load_glove_embeddings(vocab: torchtext.vocab.Vocab, data_dir='./data') -> to
         torch.Tensor: the embedding matrix
     """
     if Path(f'{data_dir}/embeddings.pt').exists():
-        return torch.load(f'{data_dir}/embeddings.pt')
+       return torch.load(f'{data_dir}/embeddings.pt')
     else:
         print('Downloading GloVe embeddings...')
         
@@ -29,7 +30,7 @@ def load_glove_embeddings(vocab: torchtext.vocab.Vocab, data_dir='./data') -> to
         embeddings = torchtext.vocab.GloVe(name='840B', dim=300, cache=data_dir)
         
         # Get a list of the words in the vocabulary, in increasing index order
-        words_in_vocab = vocab.get_itos()
+        words_in_vocab = vocab.get_itos()[2:]
         
         # Get the embedding matrix for the words in the vocabulary
         W_vocab = embeddings.get_vecs_by_tokens(words_in_vocab)
@@ -75,8 +76,7 @@ class AWE(nn.Module):
         B, T = input.shape
         
         # Get the lengths of the sentences in the input
-        lengths = input.argmin(dim=1)
-        lengths = torch.where(lengths > 0, lengths, T)
+        lengths = torch.hstack([input, torch.zeros(B, 1)]).argmin(dim=1)
         
         # Pass the sentences through the embedding layer: (B x T) -> (B x T x D)
         output = self.embedding(input)
