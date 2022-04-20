@@ -76,7 +76,7 @@ class AWE(nn.Module):
         B, T = input.shape
         
         # Get the lengths of the sentences in the input
-        lengths = torch.hstack([input, torch.zeros(B, 1)]).argmin(dim=1)
+        lengths = torch.hstack([input, torch.zeros(B, 1, device=input.device)]).argmin(dim=1)
         
         # Pass the sentences through the embedding layer: (B x T) -> (B x T x D)
         output = self.embedding(input)
@@ -115,8 +115,7 @@ class LSTM(nn.Module):
         B, T = input.shape
         
         # Get the lengths of the sentences in input
-        lengths = input.argmin(dim=1)
-        lengths = torch.where(lengths > 0, lengths, T)
+        lengths = torch.hstack([input, torch.zeros(B, 1, device=input.device)]).argmin(dim=1)
         
         # Pass the sentences through the embedding layer: (B x T) -> (B x T x D)
         embeddings = self.embedding(input)
@@ -165,8 +164,7 @@ class BiLSTM(nn.Module):
         B, T = input.shape
         
         # Get the lengths of the sentences in input
-        lengths = input.argmin(dim=1)
-        lengths = torch.where(lengths > 0, lengths, T)
+        lengths = torch.hstack([input, torch.zeros(B, 1, device=input.device)]).argmin(dim=1)
         
         # Pass the sentences through the embedding layer: (B x T) -> (B x T x D)
         embeddings = self.embedding(input)
