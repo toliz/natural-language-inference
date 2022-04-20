@@ -74,7 +74,7 @@ class SNLIDataModule(pl.LightningDataModule):
             dataset = load_dataset('snli', split=split, cache_dir=f'{self.data_dir}/.cache')
             print(f'Pre-processing {split} split...')
             
-            # process each sentence in the dataset and map it to a list of indices
+            # pre-process each sentence in the dataset and map it to a list of indices
             dataset = dataset.map(self._encode, batched=True)
             
             # discard samples with invalid labels
