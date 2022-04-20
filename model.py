@@ -244,7 +244,8 @@ class NLI(pl.LightningModule):
         tokens = self.vocab(tokens)                 # convert to indices
         tokens = torch.tensor(tokens).view(1, -1)   # convert to tensor of batch size 1
         
-        encoding = self.encoder(tokens)
+        with torch.no_grad():
+            encoding = self.encoder(tokens)
         
         return encoding.flatten()
         

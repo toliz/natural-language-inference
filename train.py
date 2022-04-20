@@ -18,10 +18,11 @@ def main(args):
     tb_logger = TensorBoardLogger(
         save_dir='./tb_logs',
         name=args.encoder,
+        default_hp_metric=False,
     )
     
     checkpoint_callback = ModelCheckpoint(
-        dirpath=f'./pretrained/{args.encoder}',
+        dirpath=f'./pretrained/{args.encoder}/version_{tb_logger.version}',
         filename=f'{args.encoder}' + '-epoch={epoch}',
         monitor='accuracy/validation',
         mode='max',
