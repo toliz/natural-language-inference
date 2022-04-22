@@ -207,10 +207,10 @@ class NLI(pl.LightningModule):
         encoder (str): the encoder model. One of 'AWE', 'LSTM', 'BiLSTM', 'BiLSTM-MaxPool'.
         hidden_dim (int): the dimension of the hidden state of the LSTM, if applicable.
     """
-    def __init__(self, vocab: torchtext.vocab.Vocab, encoder, hidden_dim=None, data_dir='./data'):
+    def __init__(self, encoder, hidden_dim=None, vocab=None, data_dir='./data'):
         super().__init__()
         
-        self.vocab = vocab
+        self.save_hyperparameters()
         
         match encoder:
             case 'AWE':
@@ -239,15 +239,30 @@ class NLI(pl.LightningModule):
         self._val_acc = torchmetrics.Accuracy()
         self._test_acc = torchmetrics.Accuracy()
         
-    def encode(self, input: str):
-        tokens = word_tokenize(input.lower())       # tokenize
-        tokens = self.vocab(tokens)                 # convert to indices
+    def encode(self, sentence: str):
+        tokens = word_tokenize(sentence.lower())    # tokenize
+        tokens = self.hparams.vocab(tokens)         # convert to indices
         tokens = torch.tensor(tokens).view(1, -1)   # convert to tensor of batch size 1
         
         with torch.no_grad():
             encoding = self.encoder(tokens)
         
         return encoding.flatten()
+    
+    def classify(self, sentence_A: str, sentence_B: str):
+        u = word_tokenize(sentence_A.lower())   # tokenize
+        u = self.hparams.vocab(u)               # convert to indices
+        u = torch.tensor(u).view(1, -1)         # convert to tensor of batch size 1
+        
+        v = word_tokenize(sentence_B.lower())   # tokenize
+        v = self.hparams.vocab(v)               # convert to indices
+        v = torch.tensor(v).view(1, -1)         # convert to tensor of batch size 1
+        
+        pred = self(u, v)
+        pred = pred.argmax(dim=1)
+        
+        return ['entailment', 'contradiction', 'neutral'][pred]
+        
         
     def forward(self, u, v):
         # Encode the sentences u and v.
