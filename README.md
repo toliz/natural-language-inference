@@ -25,7 +25,7 @@ The code consists of 4 folders and 4 python files:
 
 In additions to these files, this repo also includes 2 yaml files containing a conda environment for CPU and GPU, and a demo IPython Notebook to showcase the results and how to use the provided code.
 
-The 4 folders are currently empty, but you can download their contents (~1 GB unzipped) from ![Google Drive](https://drive.google.com/file/d/14KO7UUSeYq1hyQc8GUhXS8ElQUKKQH1-/view?usp=sharing). If you prefer to train from scrach on the other hand, you can run
+The 4 folders are currently empty, but you can download their contents (~1 GB unzipped) from [Google Drive](https://drive.google.com/file/d/14KO7UUSeYq1hyQc8GUhXS8ElQUKKQH1-/view?usp=sharing). If you prefer to train from scrach on the other hand, you can run
 
 ```
 # Train & evaluate on SNLI
