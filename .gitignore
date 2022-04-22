@@ -158,6 +158,9 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
+#temp files
+*tmp*
+
 # MacOS trash
 .DS_Store
 
@@ -165,6 +168,7 @@ cython_debug/
 data/
 pretrained/
 tb_logs/
+senteval/
 
 # Server files
 *.sh
